@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 配置为开发模式 -->
+    <constant name="struts.devMode" value="true" />
+    <!-- 把扩展名配置为action -->
+    <constant name="struts.action.extension" value="action" />
+    <package name="front" namespace="/" extends="struts-default">
+    <interceptors>
+    		<!-- 重新定义默认的拦截器栈 -->
+    		<interceptor-stack name="defaultStack">
+    			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+    </interceptors>
+    	<!-- 全局的Result配置 -->
+		<global-results>
+			<result name="loginUI">/loginUI.jsp</result>
+			<result name="noPrivilegeError">/noPrivilegeError.jsp</result>
+		</global-results>
+    	
+		<!-- 论坛：版块相关功能 -->
+		<action name="frontforum_*" class="forumAction" method="{1}">
+			<result name="list">/home.jsp</result>
+			<result name="show">/show.jsp</result>
+		</action>
+		
+		<!-- 论坛：主题相关功能 -->
+		<action name="fronttopic_*" class="topicAction" method="{1}">
+			<result name="show">/WEB-INF/jsp/topicAction/show.jsp</result>
+			<result name="addUI">/WEB-INF/jsp/topicAction/addUI.jsp</result>
+			<result name="toShow" type="redirectAction">topic_show?id=${id}</result>
+		</action>
+		
+		<action name="frontuser_*" class="userAction" method="{1}">
+			<result name="toIndex" type="chain">frontforum_list</result>
+		</action>
+
+    </package>
+</struts>
